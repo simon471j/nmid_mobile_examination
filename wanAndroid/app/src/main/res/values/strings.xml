@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">wanAndroid</string>
+    <string name="username">账号</string>
+    <string name="password">密码</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="repassword">确认密码</string>
+    <string name="note">还未注册？点我注册</string>
+    <string name="rememberPassword">记住密码</string>
+    <string name="wanAndroid">玩安卓</string>
+    <string name="myCoin">我的积分</string>
+    <string name="drawerOpen">open</string>
+    <string name="drawerClose">close</string>
+</resources>
