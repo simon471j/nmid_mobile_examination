@@ -3,9 +3,11 @@ package com.example.wanandroid.ui.tree
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -29,6 +31,8 @@ class ArticleInTree : AppCompatActivity() {
         var page = 0
         val recyclerView = findViewById<RecyclerView>(R.id.rv_article)
         val layoutManager = LinearLayoutManager(this)
+        val toolbar: Toolbar = findViewById(R.id.fragment_article_toolbar)
+        toolbar.visibility = View.VISIBLE
         recyclerView.layoutManager = layoutManager
         //      存储网络请求的结果
         val articleResponseContainer = ArrayList<ArticleResponse.DataBean.DatasBean>()
