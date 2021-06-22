@@ -36,7 +36,7 @@ class ArticleInTree : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
         //      存储网络请求的结果
         val articleResponseContainer = ArrayList<ArticleResponse.DataBean.DatasBean>()
-        val recyclerViewAdapter = ArticleRecyclerViewAdapter(articleResponseContainer)
+        val recyclerViewAdapter = ArticleRecyclerViewAdapter(articleResponseContainer,this,this)
         recyclerView.adapter = recyclerViewAdapter
 
         viewModel.articleInTree.observe(this, Observer

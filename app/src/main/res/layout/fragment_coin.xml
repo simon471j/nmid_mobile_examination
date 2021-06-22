@@ -59,8 +59,10 @@
         </LinearLayout>
 
     </LinearLayout>
-、
+
+<!--    我的积分-->
     <com.google.android.material.card.MaterialCardView
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -90,6 +92,37 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:text="0" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+<!--    我的收藏-->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/nav_like"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:src="@drawable/like" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/like" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

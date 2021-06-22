@@ -1,4 +1,4 @@
-package com.example.wanandroid.ui.home_page.article
+package com.example.wanandroid.ui.coin_page
 
 import android.content.Context
 import android.content.Intent
@@ -18,18 +18,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wanandroid.R
 import com.example.wanandroid.ui.home_page.article.ArticleRecyclerViewAdapter.ViewHolder
 import com.example.wanandroid.logic.model.ArticleResponse
+import com.example.wanandroid.logic.model.MyLikeResponse
 import com.example.wanandroid.ui.Webview
+import com.example.wanandroid.ui.home_page.article.ArticleRecyclerViewAdapter
+import com.example.wanandroid.ui.home_page.article.LikeViewModel
 import com.example.wanandroid.wanAndroidApplication
 
 /**
  * 文章的recyclerview的适配器
  */
-class ArticleRecyclerViewAdapter(
-    private var datas: ArrayList<ArticleResponse.DataBean.DatasBean>,
+class MyLikeArticleRecyclerViewAdapter(
+    private var datas: ArrayList<MyLikeResponse.DataBean.DatasBean>,
     val viewLifecycleOwner: LifecycleOwner,
     viewModelStoreOwner: ViewModelStoreOwner
 ) :
-    RecyclerView.Adapter<ViewHolder>() {
+    RecyclerView.Adapter<MyLikeArticleRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var context: Context
     val viewModel by lazy { ViewModelProvider(viewModelStoreOwner).get(LikeViewModel::class.java) }
@@ -50,9 +53,9 @@ class ArticleRecyclerViewAdapter(
         if (datas[position].author != "")
             author.text = datas[position].author
         else {
-            author.text = "转载自${datas[position].shareUser}"
+            author.text = ""
         }
-        publishDate.text = datas[position].niceShareDate
+        publishDate.text = datas[position].niceDate
         title.text = datas[position].title
         description.text = datas[position].desc
         view.setOnClickListener {
@@ -64,37 +67,32 @@ class ArticleRecyclerViewAdapter(
         view.setOnLongClickListener {
             val popupMenu = PopupMenu(context, view)
             popupMenu.menuInflater.inflate(R.menu.longclick_article_menu, popupMenu.menu);
-            popupMenu.menu.removeItem(R.id.dislike)
-            //弹出式菜单的菜单项点击事件
-            popupMenu.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.like -> {
-                        viewModel.likeLiveData.observe(viewLifecycleOwner, Observer {
-                            val result = it.getOrNull()
-                            if (result != null && result.errorCode == 0){
-                                Toast.makeText(
-                                    wanAndroidApplication.context,
-                                    "收藏成功",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            else
-                                Toast.makeText(
-                                    wanAndroidApplication.context,
-                                    "数据为空",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                        })
-                        Log.d("like", "onBindViewHolder: 点击了收藏")
-                        val result = viewModel.like(datas[position].id)
 
+//            弹出式菜单的菜单项点击事件
+            popupMenu.setOnMenuItemClickListener { it ->
+                when (it.itemId) {
+                    R.id.dislike -> {
+                        viewModel.dislikeLiveData.observe(viewLifecycleOwner, Observer {
+                            val result = it.getOrNull()
+                            when {
+                                result == null -> Toast.makeText(context, "网络异常", Toast.LENGTH_SHORT).show()
+                                result.errorCode == 0 -> {
+                                    Toast.makeText(context, "取消收藏", Toast.LENGTH_SHORT).show()
+                                    datas.removeAt(position)
+                                    notifyDataSetChanged()
+                                }
+                                else -> Log.d("dislike", "dislike: 不合法操作")
+                            }
+                        })
+                        viewModel.dislike(datas[position].originId)
                     }
-//                    R.id.dislike->
 
                     else -> Log.d("popupMenu", "未点击事件")
                 }
+
                 true
             }
+
             popupMenu.gravity = Gravity.RIGHT
             popupMenu.show()
             true
@@ -106,7 +104,7 @@ class ArticleRecyclerViewAdapter(
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
-    fun setData(datas: ArrayList<ArticleResponse.DataBean.DatasBean>) {
+    fun setData(datas: ArrayList<MyLikeResponse.DataBean.DatasBean>) {
         this.datas = datas
     }
 }

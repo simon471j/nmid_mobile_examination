@@ -1,6 +1,8 @@
 package com.example.wanandroid.logic.network
 
+import android.app.Service
 import android.util.Log
+import com.example.wanandroid.logic.network.wanAndroidNetwork.await
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +21,9 @@ object wanAndroidNetwork {
     private val articleInTreeService = ServiceCreator.create<ArticleInTreeService>()
     private val loginService = ServiceCreator.create<LoginService>()
     private val getCoinService = ServiceCreator.create<CoinService>()
+    private val likeArticleService = ServiceCreator.create<LikeArticleService>()
+    private val myLikeService = ServiceCreator.create<MyLikeService>()
+    private val dislikeService = ServiceCreator.create<DislikeService>()
 
     suspend fun searchBanner() = bannerService.getBanner().await()
     suspend fun searchArticle(page: Int) = articleService.searchArticle(page).await()
@@ -39,13 +44,16 @@ object wanAndroidNetwork {
 
     ).await()
 
+    suspend fun likeArticle(id: Int) = likeArticleService.likeArticle(id).await()
+    suspend fun searchMyLike(page: Int) = myLikeService.searchMyLike(page).await()
+    suspend fun dislikeService(id: Int) = dislikeService.dislikeArticle(id).await()
+
     private suspend fun <T> Call<T>.await(): T {
 
         return suspendCoroutine {
             enqueue(object : Callback<T> {
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     val body = response.body()
-                    Log.d("headerResponse", response.headers().toString())
                     if (body != null) {
                         it.resume(body)
                         Log.d("请求结果", " ${body}}")
